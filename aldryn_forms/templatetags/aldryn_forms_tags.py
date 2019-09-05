@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import template
 from django.utils import encoding
-from django.utils.text import mark_safe
+from django.utils.text import slugify
 
 
 register = template.Library()
@@ -16,13 +16,13 @@ def render_notification_text(context, email_notification, email_type):
 
     render_func = 'render_%s' % email_type
     message = getattr(email_notification, render_func)(context=text_context)
-    return mark_safe(message)
+    return slugify(message, allow_unicode=True)
 
 
 @register.simple_tag()
 def render_form_widget(field, **kwargs):
     markup = field.as_widget(attrs=kwargs)
-    return mark_safe(markup)
+    return slugify(markup, allow_unicode=True)
 
 
 @register.filter()
